@@ -1,7 +1,7 @@
 let express = require('express')
 let router = express.Router()
 
-app.get('/dinosaurs', (req, res) => {
+router.get('/dinosaurs', (req, res) => {
     let dinosaurs = fs.readFileSync('./dinosaurs.json')
     let dinoData = JSON.parse(dinosaurs)
     let nameFilter = req.query.nameFilter
