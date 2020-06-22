@@ -12,29 +12,20 @@ app.use(layouts)
 // QUESTION:  WHY DOES IT RESPOND AS "UNDEFINED" console.log(req.body)
 app.use(express.urlencoded({extended: false}))
 app.use(methodOverride('_method'))
+app.use('/dinosaurs', require('./controllers/dinosaurs'))
 
 app.get('/', (req, res) => {
     res.render('home')
 })
 
-app.get('/dinosaurs', (req, res) => {
-    let dinosaurs = fs.readFileSync('./dinosaurs.json')
-    let dinoData = JSON.parse(dinosaurs)
-    let nameFilter = req.query.nameFilter
-
-    if (nameFilter) {
-        //Filtering over my dinoData array, only returning values that have matched what I input in my "nameFilter"
-        dinoData = dinoData.filter(dino => {
-            return dino.name.toLowerCase() === nameFilter.toLowerCase()
-        })
-    }
-
-
-    res.render('dinosaurs/index', {myDinos: dinoData})
-})
-
 app.get('/dinosaurs/new', (req, res) => {
     res.render('dinosaurs/new')
+})
+
+app.get('/dinosaurs/edit/:idx', (req, res) => {
+    let dinosaurs = fs.readFileSync('./dinosaurs.json')
+    dinosaurs = JSON.parse(dinosaurs)
+    res.render('dinosaurs/edit', {dino: dinosaurs[req.params.idx], dinoId: req.params.idx})
 })
 
 app.get('/dinosaurs/:idx', (req, res) => {
@@ -69,4 +60,18 @@ app.delete('/dinosaurs/:idx', (req, res) => {
     res.redirect('/dinosaurs')
 })
 
+app.put('/dinosaurs/:idx', (req, res) => {
+    let dinosaurs = fs.readFileSync('./dinosaurs.json')
+    dinosaurs = JSON.parse(dinosaurs)
+    //select name & type of dinosaur selected by its ID, then reassign name & type
+    dinosaurs[req.params.idx].name = req.body.name
+    dinosaurs[req.params.idx].type = req.body.type
+    //rewrite the file
+    fs.writeFileSync('./dinosaurs.json', JSON.stringify(dinosaurs))
+    //redirect to main page
+    res.redirect('/dinosaurs')
+})
+    
+
+    
 app.listen(3000, () => {console.log('🦕Singin and Dancin on Port 3000🦕')})
