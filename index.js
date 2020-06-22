@@ -65,7 +65,7 @@ app.delete('/dinosaurs/:idx', (req, res) => {
     dinosaurs.splice(req.params.idx, 1)
     //save over our dinosaurs.json with the newly formatted dinosaurs array
     fs.writeFileSync('./dinosaurs.json', JSON.stringify(dinosaurs))
-    //once everything is done, we want to show the user the impact of his actions by redirecting to the /dinosaurs route to see all remaining dinosaurs
+    //once everything is done, we want to show the user the impact of his actions by redirecting to the /dinosaurs route to see all remaining dinosaurs.
     res.redirect('/dinosaurs')
 })
 

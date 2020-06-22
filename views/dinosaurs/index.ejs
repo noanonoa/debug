@@ -4,7 +4,7 @@
     <input type="submit">
 </form>
 <ul>
-    <% myDinos.forEach(dino, index => { %>
+    <% myDinos.forEach((dino, index) => { %>
         <li><%= dino.name %> is a <%= dino.type %>
             <form method="POST" action="/dinosaurs/<%= index %>/?_method=DELETE">
                 <input type="submit" value="Delete">
